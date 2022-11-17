@@ -19,7 +19,7 @@ public class MemberController {
 
 
     //요청으로 들어오는 것을 매개변수로 받겠음
-    @PostMapping("/new") //members/new
+    @PostMapping("/signup") //members/new -- create
     public PostMemberRes join(@RequestBody PostMemberReq postMemberReq) {
         return memberService.create(postMemberReq);
     }
@@ -30,7 +30,7 @@ public class MemberController {
      */
 
     //관리자만 접근 가능
-    @GetMapping("")
+    @GetMapping("") //read
     public List<GetMemberRes> findAll(@RequestBody GetMemberByNameReq getMemberByNameReq) {
         return memberService.findAll(getMemberByNameReq);
     }
@@ -40,7 +40,7 @@ public class MemberController {
      */
 
     @GetMapping("/info")
-    public List<GetMemberRes> findByName(@RequestBody GetMemberByNameReq getMemberByNameReq) {
+    public GetMemberRes findByName(@RequestBody GetMemberByNameReq getMemberByNameReq) {
         return memberRepository.selectByName(getMemberByNameReq.getName());
     }
 
@@ -51,7 +51,7 @@ public class MemberController {
     }
 
     //비밀번호 변경
-    @PatchMapping("/update")
+    @PatchMapping("/update")//update modify
     public String update(@RequestBody PatchMemberByPwReq patchMemberByPwReq){
         return memberRepository.updatePw(patchMemberByPwReq);
     }

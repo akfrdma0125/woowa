@@ -18,8 +18,8 @@ public class MemberService {
     }
 
     public List<GetMemberRes> findAll(GetMemberByNameReq getMemberByNameReq){
-        List<GetMemberRes> getMemberRes=memberRepository.selectByName(getMemberByNameReq.getName());
-        RoleType roleType=getMemberRes.get(0).getRole();
+        GetMemberRes getMemberRes=memberRepository.selectByName(getMemberByNameReq.getName());
+        RoleType roleType=getMemberRes.getRole();
         if(roleType == RoleType.ADMIN)
             return memberRepository.selectAll();
         else

@@ -50,21 +50,19 @@ public class MemberRepository {
                 ));
     }
 
-    public List<GetMemberRes> selectByName(String memberName) {
-        String findAllQuery =
+    public GetMemberRes selectByName(String memberName) {
+        String findQuery =
                 "select member_id, email, member_name, role " +
                 "from member " +
                         "where member_name like ?;";
 
-        Object[] findAllQueryParams = new Object[]{("%"+memberName+"%")};
+        Object[] findQueryParams = new Object[]{("%"+memberName+"%")};
 
-        return this.jdbcTemplate.query(findAllQuery,
-                (rs, rowNum) -> new GetMemberRes(
-                        rs.getLong("member_id"),
-                        rs.getString("email"),
-                        rs.getString("member_name"),
-                        RoleType.toRoleType(rs.getString("role"))
-                ), findAllQueryParams);
+        try {
+            return this.jdbcTemplate.queryForObject(findQuery,findQueryParams,GetMemberRes.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public String selectByNamePw(GetMemberByNamePwReq getMemberByNamePwReq) {

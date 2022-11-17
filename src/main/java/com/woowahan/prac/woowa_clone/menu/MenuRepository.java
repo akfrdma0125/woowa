@@ -1,12 +1,15 @@
 package com.woowahan.prac.woowa_clone.menu;
 
 import com.woowahan.prac.woowa_clone.members.RoleType;
+import com.woowahan.prac.woowa_clone.members.dto.PatchMemberByPwReq;
 import com.woowahan.prac.woowa_clone.members.dto.PostMemberRes;
 import com.woowahan.prac.woowa_clone.menu.dto.GetMenuRes;
+import com.woowahan.prac.woowa_clone.menu.dto.PatchMenuStateReq;
 import com.woowahan.prac.woowa_clone.menu.dto.PostMenuReq;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -47,7 +50,7 @@ public class MenuRepository {
                 );
     }
 
-    public String menuinsert(PostMenuReq postMenuReq) {
+    public String insertMenu(PostMenuReq postMenuReq) {
         String joinQuery = "insert into menu(store_id, menu_name, soldout) values(?,?,?);";
         Object[] joinQueryParams = new Object[]{postMenuReq.getStoreid(), postMenuReq.getMenuname(), postMenuReq.getSoldout()};
 
@@ -57,4 +60,21 @@ public class MenuRepository {
 
         return MenuId.toString();
     }
+
+    public String updateMenuState(PatchMenuStateReq patchMenuStateReq) {
+        String updateQuery =
+                "update menu " +
+                        "set soldout = ?" +
+                        "where menuname like ? and store_id like ?;";
+
+        Object[] updateQueryParams = new Object[]{patchMenuStateReq.getSoldout(), patchMenuStateReq.getMenuname(), patchMenuStateReq.getStoreid()};
+        int tuple = this.jdbcTemplate.update(updateQuery,updateQueryParams);
+
+        if(tuple > 0)
+            return "success";
+        else
+            return "fail";
+
+    }
+
 }
